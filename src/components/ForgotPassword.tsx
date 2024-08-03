@@ -50,7 +50,7 @@ const ForgotPasswordForm: React.FC<ForgotPass> =memo( ({showForgotPass,handleClo
           <form >
             <label className="block mb-2">
               Email:
-              <input type="email" name="email" className="border p-2 w-full" required />
+              <input type="email" name="email" className="border p-2 w-full" required onChange={(e)=>{setEmail(e.target.value)}}/>
             </label>
             
             <div className="flex justify-between">

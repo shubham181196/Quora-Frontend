@@ -1,5 +1,6 @@
 import { memo } from "react";
-import React, { FC, FormEvent } from 'react';
+import  { FC, FormEvent } from 'react';
+
 
 interface ModalProps {
   show: boolean;

@@ -5,13 +5,13 @@ import science from "../assets/science.jpg"
 import fam from "../assets/fam.jpg"
 import tech from "../assets/tech.jpg"
 import animals from "../assets/animals.jpg"
-
+import {FC} from 'react';
 type MenuProp = {
   setMenu:any
 }
 
 
-const Leftbar = (props:MenuProp) => {
+const Leftbar:FC<MenuProp> = (props:MenuProp) => {
   return (
     <div className="pl-20 pt-5 text-sm">
       <div className="flex cursor-pointer" onClick={()=> props?.setMenu("finance")}>
