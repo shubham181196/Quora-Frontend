@@ -1,4 +1,4 @@
-import { useState } from "react"
+import {FC, useState } from "react"
 import Leftbar from "./Leftbar"
 import Rightbar from "./Rightbar"
 
@@ -6,7 +6,7 @@ type seachProp = {
   search:any
 }
 
-const Home = (props:seachProp) => {
+const Home:FC<seachProp> = (props:seachProp) => {
 
   const [menu,setMenu] = useState("")
 
