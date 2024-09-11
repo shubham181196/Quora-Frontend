@@ -1,0 +1,3 @@
+.avatar-text > div span {
+    font-size: larger !important;  /* Override inline font size */
+  }

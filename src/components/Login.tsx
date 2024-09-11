@@ -1,98 +1,83 @@
-import React, { useState, FormEvent, useCallback } from 'react';
+import React, { FC, useState, FormEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import welcome from '../assets/welcome.jpg';
 import google from '../assets/google.png';
 import facebook from '../assets/facebook.png';
 import Modal from './Modal';
 import ForgotPasswordForm from './ForgotPassword';
-
-interface FormData {
-  email: string;
-  pass: string;
-}
+import axios from "axios";
+import { AuthObject } from '../App';
 interface SignupData {
-  email:string,
-  pass:string,
-  phone:string
+  email: string,
+  pass: string,
+  phone: string
 }
 
-const Login: React.FC = () => {
-  console.log("rendered ","times");
+
+
+interface LoginProps {
+  auth: AuthObject;
+  setAuth: React.Dispatch<React.SetStateAction<AuthObject>>;
+}
+
+const Login: FC<LoginProps> = ({ auth, setAuth }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [pass, setPassword] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [phone ,setPhone]=useState<string>('99932433243');
-  const [forgotPass,setforgotPass]=useState<boolean>(false);
-  const data: FormData = { email, pass };
-  const signupdata: SignupData={email,pass,phone}; 
+  const [phone, setPhone] = useState<string>('99932433243');
+  const [forgotPass, setForgotPass] = useState<boolean>(false);
 
   const auth2Handler = useCallback((url: string) => {
     window.location.href = url;
-  },[]);
+  }, []);
 
+ 
   const handleNormalLogin = useCallback(async () => {
+   
     try {
-      const resp = await fetch('http://localhost:8080/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const resp = await axios.post('http://localhost:8080/auth/signin', {
+        email: email,      
+        pass: pass
+      },{ withCredentials: true });
 
-      if (resp.ok) {
+      if (resp.status === 200) { 
+        setAuth({ userState: true, email: resp.data.email,userId:resp.data.userId }); 
         navigate('/login/home');
-        const d=await resp.text();
-        console.log( resp.status ,d);
-        
+        // console.log(resp.status, resp.data);
       } else {
-        console.log(resp.body);
-        console.log('error');
+        console.log('Error:', resp.status);
       }
     } catch (e) {
-      console.log(e);
+      console.error('Error during login:', e);
     }
-  },[]);
+  }, [email, pass, navigate, setAuth]); // Added required dependencies
 
   const handleSignUp = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const signupdata = new FormData(event.currentTarget);
-    signupdata.set('phone',phone);
+    signupdata.set('phone', phone);
     const email = signupdata.get('email');
     const password = signupdata.get('password');
-    const phone1 =signupdata.get('phone');
-    
-    try{
-       console.log("req made");
-        const resp=await fetch('http://localhost:8080/auth/signup',{
-          method:'POST',
-          headers:{
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            pass,
-            phone
-          }),
-        }
-        )
-        console.log(signupdata);
-        const data=resp.body;
-        console.log("data",data);
-        
-        if(resp.ok) {
-          console.log("res received");
-          navigate('/home1');
-          setShowModal(false);
-        }else{
-          console.log("error code : not 201");
-        }
-    }catch(e){
-      console.log("error while signing up",e);
+
+    try {
+      const resp = await axios.post('http://localhost:8080/auth/signup', {
+        email: email,
+        pass: password,
+        phone: phone
+      });
+
+      if (resp.status === 201) {
+        console.log("Signup successful");
+        navigate('/home1');
+        setShowModal(false);
+      } else {
+        console.log("Signup failed with status:", resp.status);
+      }
+    } catch (e) {
+      console.error("Error during signup:", e);
     }
-    
-  },[]);
+  }, [phone, navigate]);
 
   return (
     <div
@@ -112,18 +97,14 @@ const Login: React.FC = () => {
               <span className="text-cyan-700">Privacy Policy.</span>
             </h1>
             <div
-              onClick={() => {
-                auth2Handler('http://localhost:8080/oauth2/authorization/google');
-              }}
+              onClick={() => auth2Handler('http://localhost:8080/oauth2/authorization/google')}
               className="cursor-pointer flex p-4 border border-spacing-1 items-center w-88 hover:bg-gray-200 rounded-sm mt-5"
             >
               <img src={google} alt="google_icon" className="w-5 h-5 ml-2 hover:bg-gray-200"></img>
               <h1 className="ml-7 hover:bg-gray-200">Continue with Google</h1>
             </div>
             <div
-              onClick={() => {
-                auth2Handler('http://localhost:8080/oauth2/authorization/facebook');
-              }}
+              onClick={() => auth2Handler('http://localhost:8080/oauth2/authorization/facebook')}
               className="cursor-pointer flex p-4 border border-spacing-1 items-center w-88 hover:bg-gray-200 rounded-sm mt-2"
             >
               <img src={facebook} alt="facebook_icon" className="w-5 h-5 ml-2 rounded-full hover:bg-gray-200"></img>
@@ -143,20 +124,18 @@ const Login: React.FC = () => {
             <input
               placeholder="your email"
               className="border border-spacing-1 p-2 w-72 mt-2"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} // Handle email input
             ></input>
             <h1 className="mt-4 font-semibold text-sm">Password</h1>
             <input
               placeholder="your password"
               className="border border-spacing-1 p-2 w-72 mt-2"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              value={pass}
+              onChange={(e) => setPassword(e.target.value)} // Handle password input
             ></input>
             <div className="flex mt-4">
-              <h1 className="text-zinc-400 text-sm mt-2 hover:underline cursor-pointer" onClick={()=>{setforgotPass(true)}}>Forgot password ?</h1>
+              <h1 className="text-zinc-400 text-sm mt-2 hover:underline cursor-pointer" onClick={() => setForgotPass(true)}>Forgot password ?</h1>
               <button className="bg-blue-500 text-white p-2 w-20 ml-24 rounded-full" onClick={handleNormalLogin}>
                 Login
               </button>
@@ -169,7 +148,7 @@ const Login: React.FC = () => {
         </h1>
       </div>
       {showModal && <Modal show={showModal} handleClose={() => setShowModal(false)} handleSignUp={handleSignUp} />}
-      {forgotPass&& <ForgotPasswordForm showForgotPass={forgotPass} handleClose={() => setforgotPass(false)}/>}
+      {forgotPass && <ForgotPasswordForm showForgotPass={forgotPass} handleClose={() => setForgotPass(false)} />}
     </div>
   );
 };

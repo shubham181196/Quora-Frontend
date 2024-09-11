@@ -24,12 +24,12 @@ const Navbar = (props:searchProp) => {
 
   return (
     <div className="flex pl-20 pt-3 shadow-md h-14 w-screen">
-      <img src={quora} className="w-24 h-7"/>
-      <img src={home} className="w-7 h-7 ml-10 cursor-pointer"/>
-      <img src={clipboard} className="w-7 h-7 ml-10 cursor-pointer"/>
-      <img src={edit} className="w-7 h-7 ml-10 cursor-pointer"/>
-      <img src={group} className="w-7 h-7 ml-10 cursor-pointer"/>
-      <img src={bell} className="w-7 h-7 ml-10 cursor-pointer"/>
+      <img src={quora} className="w-24 h-7 mt-1"/>
+      <img src={home} className="w-7 h-7 ml-10 mt-1 cursor-pointer"/>
+      <img src={clipboard} className="w-7 h-7 ml-10 mt-1 cursor-pointer"/>
+      <img src={edit} className="w-7 h-7 ml-10 mt-1 cursor-pointer"/>
+      <img src={group} className="w-7 h-7 ml-10 mt-1 cursor-pointer"/>
+      <img src={bell} className="w-7 h-7 ml-10 mt-1 cursor-pointer"/>
       <div className="flex border border-spacing-1 h-9 ml-10 w-72 p-1 cursor-pointer">
         <img src={lens} className="w-3 h-3 mt-2 ml-3"/>
         <input onChange={(e)=> props?.setSearch(e.target.value)} placeholder="Search Quora" className="ml-2 outline-none"/>
@@ -38,7 +38,7 @@ const Navbar = (props:searchProp) => {
       <img src={globe} className="w-5 h-5 ml-5 mt-2 cursor-pointer"/>
      // in place of true do email validation 
       {true ? <Avatar round size="25" className="mt-0.5 ml-2 cursor-pointer" name={"to be placed "}/>
-      : <Avatar round size="25" className="mt-0.5 ml-2 cursor-pointer" src={account}/>}
+      : <Avatar round size="25" className="mt-0.5 ml-2 cursor-pointer" src={"to be r"}/>}
       <h1 onClick={()=> setPost(true)} className="bg-red-700 rounded-full text-sm cursor-pointer text-white w-36 pl-6 ml-6 pt-2 h-9">Add question</h1>
       {post && <PostPopup setPost={setPost}/>}
     </div>
