@@ -9,14 +9,10 @@ type postType = {
 
 const PostPopup = (props:postType) => {
 
-  const questionRef = collection(storage,"questions")
   const [quest,setQuest] = useState("")
 
   const addQuestion = () =>{
-      addDoc(questionRef,{
-        question:quest,
-        email:auth?.currentUser?.email
-      })
+      console.log("Hi");
   }
   
   return (

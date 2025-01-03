@@ -46,8 +46,8 @@ const AskPostDialog: React.FC<dialogProp> = (props:dialogProp) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="bg-white  p-4 rounded-md shadow-md w-5/12 h-4/6">
-        {/* Tabs for switching between question and post */}
-        <div className="">✕</div>
+       
+        <button onClick={props.onClose}>✕</button>
         <div className="flex justify-around mb-4">
           <button
             onClick={() => setActiveTab("question")}

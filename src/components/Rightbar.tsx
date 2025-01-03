@@ -124,7 +124,7 @@ export const Rightbar = (props: searchProp) => {
             <h1 className="ml-3 mt-1 font-bold">{"Shubham"}</h1>
           </div>
           {data.title !== "" && <h1 className="mt-4 ml-2 font-bold">{data?.title}</h1>}
-          <div className="mt-2 ml-2 font-light">{data?.body}</div>
+          <div className="mt-2 ml-2 font-light">{data?.answers[0]?.text}</div>
           <hr className="mt-1" />
           <div className="flex">
             <img
